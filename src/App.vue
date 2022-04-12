@@ -38,7 +38,7 @@ export default {
         "soonmanagerSync"
       );
 
-      soonmanagerSync.setBaseUrl("models/tsp0408/");
+      soonmanagerSync.setBaseUrl("models/tsp-0412/");
 
       soonmanagerSync.loadScene({
         isIdleRest: true,
