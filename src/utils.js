@@ -28,7 +28,7 @@ const shimLight = (ssp) => {
       y: -20,
       z: 0,
     },
-    openShadow: true,
+    openShadow: false,
     mapSize: 6000,
   });
 
@@ -92,7 +92,7 @@ const groundEnv = (ssp) => {
 const envIntensity = (ssp) => {
   ssp.manager.store.modelManager.scene.traverse((child) => {
     if (child.isMesh) {
-      child.material.envMapIntensity = 0.4;
+      child.material.envMapIntensity = 0.6;
     }
   });
 };
@@ -103,10 +103,10 @@ const envIntensity = (ssp) => {
  */
 export const sspLoaded = (ssp) => {
   // 更新阴影
-  ssp.updateAllShadow();
+  // ssp.updateAllShadow();
 
   // 地面反射
-  groundEnv(ssp);
+  // groundEnv(ssp);
 
   // 反射度调整
   envIntensity(ssp);
