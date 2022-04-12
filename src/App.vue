@@ -1,28 +1,66 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <vue-soonspace
+      :options="{
+        background: {
+          alpha: true,
+        },
+        controls: {
+          zoomMinDistance:-1
+        }
+      }"
+      @sceneReady="sceneReady"
+      @modelClick="modelClick"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SoonmanagerSyncPlugin from "@soonspacejs/plugin-soonmanager-sync";
+import { sspInit, sspLoaded } from "./utils";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  methods: {
+    modelClick(model) {
+      console.log("modelClick", model);
+    },
+    sceneReady(ssp) {
+      window.ssp = ssp;
+
+      // 场景初始化时
+      sspInit(ssp);
+
+      ssp.setModelDracoDecoderPath("draco/");
+
+      const soonmanagerSync = ssp.registerPlugin(
+        SoonmanagerSyncPlugin,
+        "soonmanagerSync"
+      );
+
+      soonmanagerSync.setBaseUrl("models/tsp0408/");
+      // soonmanagerSync.setBaseUrl("models/tsp-merge4/");
+
+      soonmanagerSync.loadScene({
+        isIdleRest: true,
+        loadSceneAllSuccess: () => {
+          console.log("loaded");
+
+          // 场景加载完成时
+          sspLoaded(ssp);
+        },
+      });
+    },
+  },
+};
 </script>
 
 <style>
+body {
+  margin: 0;
+  background: aquamarine;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
 }
 </style>
