@@ -6,8 +6,10 @@
           alpha: true,
         },
         controls: {
-          zoomMinDistance:-1
-        }
+          enabledMousePointInteractive: true,
+          panSpeed: 1,
+          zoomMinDistance: -1,
+        },
       }"
       @sceneReady="sceneReady"
       @modelClick="modelClick"
@@ -38,7 +40,7 @@ export default {
         "soonmanagerSync"
       );
 
-      soonmanagerSync.setBaseUrl("models/tsp-0412/");
+      soonmanagerSync.setBaseUrl("models/tsp-0418/");
 
       soonmanagerSync.loadScene({
         isIdleRest: true,

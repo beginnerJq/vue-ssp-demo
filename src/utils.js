@@ -15,22 +15,30 @@ const shimLight = (ssp) => {
   ambientLight.visible = false;
   hemisphereLight.visible = false;
 
+  directionalLight.shadow.bias = -0.005;
+
   ssp.setDirectionalLight({
     id: 'defaultDirectionalLight',
     name: 'defaultDirectionalLight',
     position: {
-      x: 24,
-      y: 20,
-      z: 25,
+      x: -24,
+      y: 40,
+      z: -25,
     },
     target: {
-      x: 0,
+      x: 20,
       y: -20,
       z: 0,
     },
-    openShadow: false,
+    openShadow: true,
     mapSize: 6000,
   });
+
+  // const cameraHelper = new ssp.THREE.CameraHelper(
+  //   directionalLight.shadow.camera
+  // );
+
+  // ssp.viewport.scene.add(cameraHelper);
 
   return directionalLight;
 };
@@ -48,42 +56,18 @@ export const sspInit = (ssp) => {
 
   // 灯光修改
   shimLight(ssp);
+
+  ssp.setSkyBackground('sun/', [
+    'px.jpg',
+    'nx.jpg',
+    'py.jpg',
+    'ny.jpg',
+    'pz.jpg',
+    'nz.jpg',
+  ]);
 };
 
 /* --------------------------------------------- loaded --------------------------------------------- */
-
-/**
- * 地面反射
- */
-const groundEnv = (ssp) => {
-  const { THREE } = ssp;
-
-  // 站厅地板模型
-  const [hall] = ssp.getModelByName('TSPzhantingzhong');
-
-  // 地板
-  const hallMesh = hall.getObjectByName('对象007');
-
-  const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(1024, {
-    type: THREE.HalfFloatType,
-  });
-
-  const cubeCamera = new THREE.CubeCamera(1, 100, cubeRenderTarget);
-
-  console.log(hallMesh.material);
-
-  hallMesh.material.normalMap = null;
-  hallMesh.material.envMap = cubeRenderTarget.texture;
-  hallMesh.material.envMapIntensity = 1;
-  hallMesh.material.color = new THREE.Color('#fcfcfc');
-  hallMesh.material.roughness = 0;
-  hallMesh.material.metalness = 0.2;
-  hallMesh.material.needsUpdate = true;
-
-  // cubeCamera.position.set(-4, 0.5, -6.6);
-
-  cubeCamera.update(ssp.viewport.renderer, ssp.viewport.scene);
-};
 
 /**
  * 反射强度
@@ -92,7 +76,7 @@ const groundEnv = (ssp) => {
 const envIntensity = (ssp) => {
   ssp.manager.store.modelManager.scene.traverse((child) => {
     if (child.isMesh) {
-      child.material.envMapIntensity = 0.6;
+      child.material.envMapIntensity = 0.4;
     }
   });
 };
@@ -101,12 +85,9 @@ const envIntensity = (ssp) => {
  * 场景加载完成
  * @param {*} ssp
  */
-export const sspLoaded = (ssp) => {
+export const sspLoaded = async (ssp) => {
   // 更新阴影
-  // ssp.updateAllShadow();
-
-  // 地面反射
-  // groundEnv(ssp);
+  ssp.updateAllShadow();
 
   // 反射度调整
   envIntensity(ssp);
