@@ -86,11 +86,11 @@ const envIntensity = (ssp) => {
  * @param {*} ssp
  */
 export const sspLoaded = async (ssp) => {
-  // 更新阴影
-  ssp.updateAllShadow();
-
   // 反射度调整
   envIntensity(ssp);
+
+  // 更新阴影
+  ssp.updateAllShadow();
 
   // 渲染场景
   ssp.render();
