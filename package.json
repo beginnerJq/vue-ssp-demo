@@ -10,7 +10,7 @@
   "dependencies": {
     "@soonspacejs/plugin-soonmanager-sync": "^2.3.20",
     "core-js": "^3.6.5",
-    "soonspacejs": "^2.3.20",
+    "soonspacejs": "file:libs/soonspacejs",
     "vue": "^2.6.11",
     "vue-soonspace": "^2.3.3"
   },

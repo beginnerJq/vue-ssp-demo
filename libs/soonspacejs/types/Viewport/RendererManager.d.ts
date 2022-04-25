@@ -1,0 +1,52 @@
+import { Scene, WebGLRenderer, Camera, Vector2 } from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { Pass } from 'three/examples/jsm/postprocessing/Pass.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { CSS2DRenderer, CSS2DHalfRenderer, CSS3DRenderer } from '../Renderer';
+import { InternalOptions, ViewportOptions } from '../Interface';
+export interface PassObj {
+    renderPass: RenderPass;
+    outlinePass: OutlinePass;
+    unrealBloomPass: UnrealBloomPass;
+    sobelPass: ShaderPass;
+    gammaCorrectionPass: ShaderPass;
+    fxaaPass: ShaderPass;
+}
+declare class RendererManager {
+    scene: Scene;
+    options: ViewportOptions;
+    internalOptions: InternalOptions;
+    effectComposer: EffectComposer | null;
+    renderer: WebGLRenderer;
+    container: HTMLElement;
+    interactiveContainer: HTMLElement;
+    rendererCSS2D: CSS2DRenderer;
+    rendererCSS3D: CSS3DRenderer;
+    rendererCSS2DHalf: CSS2DHalfRenderer;
+    constructor(scene: Scene, options: ViewportOptions);
+    initEffectComposer(): EffectComposer;
+    initAllPass(camera: Camera): PassObj;
+    addPass(effectPass: Pass): void;
+    isIncludesPass(effectPass: Pass): boolean;
+    setInternalState(name: keyof InternalOptions, state: boolean): void;
+    getWidth(): number;
+    getHeight(): number;
+    getMouseRelativeConRatio(clientPoint: MouseEvent): number[];
+    getMousePoint(clientPoint: MouseEvent): Vector2;
+    _initContainer(): HTMLElement;
+    _initRenderer(): WebGLRenderer;
+    _initRenderCSS2D(): CSS2DRenderer;
+    _initRenderCSS3D(): CSS3DRenderer;
+    _initRenderCSS2DHalf(): CSS2DHalfRenderer;
+    _initInteractiveContainer(): HTMLElement;
+    _initRenderPass(camera: Camera): RenderPass;
+    _initOutlinePass(camera: Camera): OutlinePass;
+    _initUnrealBloomPass(): UnrealBloomPass;
+    _initSobelPass(): ShaderPass;
+    _initGammaCorrectionPass(): ShaderPass;
+    _initFXAAPass(): ShaderPass;
+}
+export default RendererManager;
